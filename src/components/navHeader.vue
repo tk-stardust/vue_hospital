@@ -1,7 +1,20 @@
 <template>
   <div class="header-container">
     <div class="header-left flex-box">
-        <el-icon class="icon" size="20"> <Fold/> </el-icon>
+        <el-icon class="icon" size="20" @click="collapseMenu()"> <Fold/> </el-icon>
+        <ul class="flex-box">
+            <li v-for="(item,index) in selectMenu"
+             :key="item.path" 
+             :class="{selected:route.path === item.path}"
+             class="tab flex-box">
+            <el-icon size="12"> <component :is="item.icon"></component></el-icon>
+            <router-link class="text flex-box" :to="{path: item.path}">
+                {{ item.name }}
+            </router-link>
+            <el-icon size="12" class="close"> <Close/> </el-icon>
+
+            </li>
+        </ul>
     </div>
     <div class="header-right">
         <el-dropdown>
@@ -13,8 +26,6 @@
             </div>
             <template #dropdown>
             <el-dropdown-menu>
-                <el-dropdown-item>Action 1</el-dropdown-item>
-                <el-dropdown-item>Action 2</el-dropdown-item>
                 <el-dropdown-item>Action 3</el-dropdown-item>
                 <el-dropdown-item disabled>Action 4</el-dropdown-item>
                 <el-dropdown-item divided>Action 5</el-dropdown-item>
@@ -26,13 +37,22 @@
 </template>
 
 <script setup>
-
+import { storeToRefs } from 'pinia';
+import { useMenuStore } from '../stores/menu';
+import { Close } from '@element-plus/icons-vue';
+import { useRoute } from 'vue-router';
+const menuStore = useMenuStore()
+const{collapseMenu} = menuStore
+const {selectMenu} = storeToRefs(menuStore)
+// 当前的路由对象
+const route = useRoute()
 </script>
 
 <style lang="less" scoped>
 .flex-box{
     display: flex;
     align-items: center;
+    height: 100%;
 }
 .header-container{
     display: flex;
@@ -51,11 +71,43 @@
             background-color: #f5f5f5;
             cursor: pointer;
         }
+        .tab{
+            padding: 0 10px;
+            height: 100%;
+            .text{
+                margin: 0 5px;
+            }
+            .close{
+                visibility: hidden;
+            }
+            &.selected{
+                a{
+                    color: #409eff;
+                }
+                i{
+                    color: #409eff;
+                }
+                background-color: #f5f5f5;
+            }
+        }
+        .tab:hover{
+            background-color: #f5f5f5;
+            .close{
+                visibility: inherit;
+                cursor: pointer;
+                color: #000;
+            }
+        }
     }
     .header-right{
         .user-name{
             margin-left: 10px;
         }
+    }
+    a{
+        height: 100%;
+        color: #333;
+        font-size: 15px;
     }
 }
 </style>

@@ -29,13 +29,17 @@
 <script setup>
 import { useRouter } from 'vue-router';
 import { computed } from 'vue';
+import { useMenuStore } from '../stores/menu';
 const props=defineProps(['menuData',"index"])
 // 创建router实例
 const router = useRouter()
-const menuIndex = computed(()=>(item)=>`${props.index}-${item.meta.id}`
+const menuIndex = computed(()=>(item)=> `${props.index}-${item.meta.id}`
 )
+const menuStore = useMenuStore()
+const {addMenu} = menuStore
 // 点击菜单
 const menuClick = (item,active) => {
+    addMenu(item.meta)
     router.push(item.meta.path)
 }
 </script>

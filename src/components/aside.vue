@@ -1,7 +1,7 @@
 <template>
     
  <el-menu 
-    :style="{width:'230px'}"
+    :style="{width: !isCollapse ? '230px' :'64px'}"
     active-text-color="#ffd04b" 
     background-color="#545c64" 
     class="aside-container" 
@@ -9,8 +9,9 @@
     text-color="#fff" 
     @open="handleOpen" 
     @close="handleClose"
+    :collapse="isCollapse"
     >
-        <p class="logo-lg">TK陪诊</p>
+        <p class="logo-lg">{{ isCollapse ? "TK":"TK陪诊"}}</p>
         <TreeMenu :index="1" :menuData/>
     </el-menu>
 </template>
@@ -19,13 +20,19 @@
 import TreeMenu from "./treeMenu.vue"
 import { useRouter } from "vue-router";
 import { reactive } from "vue";
+import { useMenuStore } from "../stores/menu";
+import { storeToRefs } from "pinia";
 const router = useRouter()
 const menuData = reactive(router.options.routes[0].children)
-const handleOpen = ()=>{
+// menu的store
+const menuStore = useMenuStore()
+const {isCollapse} = storeToRefs(menuStore)
 
+const handleOpen = (key,keyPath)=>{
+    console.log(key, keyPath)
 }
-const handleClose = () =>{
-
+const handleClose = (key, keyPath) =>{
+    console.log(key, keyPath)
 }
 </script>
 
