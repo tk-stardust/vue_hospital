@@ -44,7 +44,6 @@ import { useRoute, useRouter } from 'vue-router';
 const menuStore = useMenuStore()
 const{collapseMenu,closeMenu} = menuStore
 const {selectMenu} = storeToRefs(menuStore)
-console.log('se',selectMenu)
 // 当前的路由对象
 const route = useRoute()
 const router = useRouter()
@@ -56,7 +55,7 @@ const closeTab=(item,index)=>{
         return
     }
 
-    const selectMenuData = menuStore.selectMenu
+    const selectMenuData = selectMenu.value
     // 删除最后一项
     if(index === selectMenuData.length){
         // 如果tag只有一个元素
