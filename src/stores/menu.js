@@ -16,8 +16,15 @@ export const useMenuStore = defineStore('menu',()=>{
             selectMenu.push(payload)
         }
     }
+    function closeMenu(payload){
+        // 找到点击数据的索引
+        const index = selectMenu.findIndex(val => val.name === payload.name)
+        // 通过索引删除数组指定元素
+        selectMenu.splice(index,1)
+
+    }
 
 
 
-    return {isCollapse,selectMenu,collapseMenu,addMenu}
+    return {isCollapse,selectMenu,collapseMenu,addMenu,closeMenu}
 })

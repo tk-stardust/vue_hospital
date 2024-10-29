@@ -11,7 +11,7 @@
             <router-link class="text flex-box" :to="{path: item.path}">
                 {{ item.name }}
             </router-link>
-            <el-icon size="12" class="close"> <Close/> </el-icon>
+            <el-icon size="12" class="close" @click="closeTab(item,index)"> <Close/> </el-icon>
 
             </li>
         </ul>
@@ -40,12 +40,42 @@
 import { storeToRefs } from 'pinia';
 import { useMenuStore } from '../stores/menu';
 import { Close } from '@element-plus/icons-vue';
-import { useRoute } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 const menuStore = useMenuStore()
-const{collapseMenu} = menuStore
+const{collapseMenu,closeMenu} = menuStore
 const {selectMenu} = storeToRefs(menuStore)
+console.log('se',selectMenu)
 // 当前的路由对象
 const route = useRoute()
+const router = useRouter()
+// 关闭tab
+const closeTab=(item,index)=>{
+    closeMenu(item)
+    // 删除非当前页tag
+    if(route.path !== item.path){
+        return
+    }
+
+    const selectMenuData = menuStore.selectMenu
+    // 删除最后一项
+    if(index === selectMenuData.length){
+        // 如果tag只有一个元素
+        if(!selectMenuData.length){
+            router.push('/')
+        }else{
+            router.push({
+                path:selectMenuData[index-1].path
+            })
+        }
+    }else{
+        router.push({
+            path:selectMenuData[index].path
+        })
+    }
+
+}
+
+
 </script>
 
 <style lang="less" scoped>
