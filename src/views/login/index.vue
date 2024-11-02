@@ -9,7 +9,8 @@
             <div class="jump-link">
                 <el-link type="primary" @click="handleChange">{{ formType ? "返回登录" : "注册账号" }}</el-link>
             </div>
-            <el-form 
+            <el-form
+            ref="loginFormRef" 
             :model="loginForm" 
             style="max-width: 600px;" 
             class="demo-ruleForm"
@@ -18,7 +19,7 @@
                     <el-input v-model="loginForm.userName" placeholder="手机号" prefix-icon="UserFilled"></el-input>
                 </el-form-item>
                 <el-form-item prop="passWord">
-                    <el-input v-model="loginForm.passWord" placeholder="密码" prefix-icon="Lock"></el-input>
+                    <el-input v-model="loginForm.passWord" type="password" placeholder="密码" prefix-icon="Lock"></el-input>
                 </el-form-item>
                 <el-form-item v-if="formType" prop="validCode">
                     <el-input v-model="loginForm.validCode" placeholder="验证码" prefix-icon="Lock">
@@ -28,7 +29,7 @@
                     </el-input>
                 </el-form-item>
                 <el-form-item>
-                    <el-button type="primary" :style="{width: '100%'}" @click="submitForm">
+                    <el-button type="primary" :style="{width: '100%'}" @click="submitForm(loginFormRef)">
                         {{ formType ? '注册账号' : '登录' }}
                     </el-button>
                 </el-form-item>
@@ -39,8 +40,8 @@
 
 <script setup>
 import { reactive, ref } from 'vue';
-import { getCode } from '../../api'
-import { ElMessage } from 'element-plus';
+import { getCode, login, userAuthentication } from '../../api'
+import { useRouter } from 'vue-router';
 
 const imgUrl = new URL("../../../public/login-head.png",import.meta.url).href 
 const phoneReg = /^1(3[0-9]|4[01456879]|5[0-35-9]|6[2567]|7[0-8]|8[0-9]|9[0-35-9])\d{8}$/
@@ -90,7 +91,7 @@ const rules = reactive({
 // 发送短信
 const countdown = reactive({
     validText:'获取验证码',
-    time:3
+    time:60
 })
 let flag = false
 
@@ -107,7 +108,7 @@ const countdownChange = ()=>{
     // 倒计时
     let interval = setInterval(()=>{
         if(countdown.time<=0){
-            countdown.time = 3
+            countdown.time = 60
             countdown.validText = '获取验证码'
             flag = false
             clearInterval(interval)
@@ -121,14 +122,45 @@ const countdownChange = ()=>{
     getCode({tel:loginForm.userName}).then(({data}) => {
 
         if(data.code === 10000){
+            console.log(data)
             ElMessage.success('发送成功')
         }
     })
 }
+const router = useRouter()
+const loginFormRef = ref()
 
 // 表单提交
-const submitForm = ()=>{
-
+const submitForm = async (formEl)=>{
+    if (!formEl) return
+    // 手动触发校验
+    await formEl.validate((valid, fields) => {
+        if (valid) {
+        console.log(loginForm,'submit!')
+            // 注册页面
+            if(formType.value){
+                userAuthentication(loginForm).then(({data})=>{
+                    if(data.code ===10000){
+                        ElMessage.success('注册成功,请登录')
+                        formType.value = 0
+                    }
+                })
+            }else{
+                // 登录页面
+                login(loginForm).then(({data})=>{
+                    if(data.code ===10000){
+                        ElMessage.success('登录成功')
+                        // 将token和用户信息缓存到浏览器
+                        localStorage.setItem('pz_token',data.data.token)
+                        localStorage.setItem('pz_userInfo',JSON.stringify(data.data.userInfo))
+                        router.push('/')
+                    }
+                })
+            }
+        } else {
+        console.log('error submit!', fields)
+        }
+  })
 }
 
 </script>

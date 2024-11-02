@@ -4,6 +4,21 @@ import { createPinia } from 'pinia'
 import './style.css'
 import App from './App.vue'
 import router from './router'
+
+// 路由守卫
+router.beforeEach((to,from)=>{
+  const token=localStorage.getItem('pz_token')
+  // 非登录页面token不存在
+  if(!token && to.path !== '/login') {
+    return '/login'
+  }else if(token && to.path === '/login'){
+    return '/'
+  }else{
+    return true
+  }
+})
+
+
 // icon
 import * as ElementPlusIconsVue from '@element-plus/icons-vue'
 
