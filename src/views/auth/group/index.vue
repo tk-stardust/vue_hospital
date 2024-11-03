@@ -9,7 +9,7 @@
         <el-table-column prop="permissionName" label="菜单权限" width="500px"/>
         <el-table-column label="操作">
             <template #default="scope">
-            <el-button link type="primary" @click="open(scope.row)">
+            <el-button type="primary" @click="open(scope.row)">
                 编辑
             </el-button>
         </template>
