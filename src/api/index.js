@@ -18,3 +18,18 @@ export const login = (data) =>{
 export const authAdmin = (params) =>{
     return request.get('/auth/admin', {params})
 }
+
+// 菜单权限数据
+export const userGetmenu = () =>{
+    return request.get('user/getmenu')
+}
+
+// 菜单权限修改
+export const userSetmenu = (data)=>{
+    return request.post('/user/setmenu',data)
+}
+
+// 菜单权限列表
+export const menuList = (params) => {
+    return request.get('/menu/list',{params})
+}

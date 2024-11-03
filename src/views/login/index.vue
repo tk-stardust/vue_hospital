@@ -11,6 +11,7 @@
             </div>
             <el-form
             ref="loginFormRef" 
+            status-icon
             :model="loginForm" 
             style="max-width: 600px;" 
             class="demo-ruleForm"
