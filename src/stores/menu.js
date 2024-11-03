@@ -5,6 +5,7 @@ import { reactive, ref } from "vue";
 export const useMenuStore = defineStore('menu',()=>{
     const isCollapse = ref(false)
     const selectMenu = reactive([])
+    const routerList = reactive([])
     // 菜单隐藏
     function collapseMenu(){
         console.log(isCollapse);
@@ -23,8 +24,29 @@ export const useMenuStore = defineStore('menu',()=>{
         selectMenu.splice(index,1)
 
     }
+    function dynamicMenu(payload){
+        // 通过glob导入文件
+        const modules = import.meta.glob('../views/**/**/*.vue')
+        function routerSet(router){
+            router.forEach(route => {
+                // 判断没有子菜单,拼接路由数据
+                if(!route.children){
+                    const url = `../views${route.meta.path}/index.vue`
+                    // 拿到获取的vue组件
+                    route.component = modules[url]
+                }else{
+                    routerSet(route.children)
+                }
+            });   
+        }
+        routerSet(payload)
+        // 拿到完整的路由数据
+        Object.assign(routerList,payload)
+    
+
+    }
 
 
 
-    return {isCollapse,selectMenu,collapseMenu,addMenu,closeMenu}
+    return {isCollapse,selectMenu,routerList,collapseMenu,addMenu,closeMenu,dynamicMenu}
 })

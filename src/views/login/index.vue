@@ -41,12 +41,16 @@
 
 <script setup>
 import { reactive, ref } from 'vue';
-import { getCode, login, userAuthentication } from '../../api'
+import { getCode, login, menuPermissions, userAuthentication } from '../../api'
 import { useRouter } from 'vue-router';
+import { useMenuStore } from '../../stores/menu';
 
 const imgUrl = new URL("../../../public/login-head.png",import.meta.url).href 
 const phoneReg = /^1(3[0-9]|4[01456879]|5[0-35-9]|6[2567]|7[0-8]|8[0-9]|9[0-35-9])\d{8}$/
 const passReg = /^[a-zA-Z0-9_-]{4,16}$/
+
+const menuStore = useMenuStore()
+const {dynamicMenu,routerList} = menuStore
 
 // 表单数据
 const loginForm = reactive({
@@ -131,6 +135,9 @@ const countdownChange = ()=>{
 const router = useRouter()
 const loginFormRef = ref()
 
+
+
+
 // 表单提交
 const submitForm = async (formEl)=>{
     if (!formEl) return
@@ -154,7 +161,12 @@ const submitForm = async (formEl)=>{
                         // 将token和用户信息缓存到浏览器
                         localStorage.setItem('pz_token',data.data.token)
                         localStorage.setItem('pz_userInfo',JSON.stringify(data.data.userInfo))
-                        router.push('/')
+                        menuPermissions().then(({data})=>{
+                            console.log(data,'dada');
+                            dynamicMenu(data.data)
+                            console.log(routerList,'routerList');
+                            // router.push('/')
+                        })
                     }
                 })
             }
