@@ -3,9 +3,12 @@ import { reactive, ref } from "vue";
 
 
 export const useMenuStore = defineStore('menu',()=>{
-    const isCollapse = ref(false)
-    const selectMenu = reactive([])
-    const routerList = reactive([])
+    const localMenuStr = localStorage.getItem('menu')
+    const localMenu = localMenuStr ? JSON.parse(localMenuStr) : {}
+    const reactiveLocalMenu = reactive(localMenu);
+    const isCollapse = localMenuStr ? reactiveLocalMenu.isCollapse : ref(false)
+    const selectMenu = localMenuStr ? reactiveLocalMenu.selectMenu : reactive([])
+    const routerList = localMenuStr ? reactiveLocalMenu.routerList : reactive([])
     // 菜单隐藏
     function collapseMenu(){
         console.log(isCollapse);
@@ -49,4 +52,6 @@ export const useMenuStore = defineStore('menu',()=>{
 
 
     return {isCollapse,selectMenu,routerList,collapseMenu,addMenu,closeMenu,dynamicMenu}
+},{
+    persist:true
 })

@@ -1,13 +1,21 @@
 <template>
     <div class="panel-heading">
         <div class="panel-lead">
-            <div class="title">管理</div>
-            <p class="description">123</p>
+            <div class="title">{{ route.meta.name }}</div>
+            <p class="description">{{ route.meta.describe }}</p>
         </div>
     </div>
 </template>
 
 <script setup>
+
+
+const props = defineProps({
+  route:{
+    type:Object
+  }
+})
+
 
 </script>
 

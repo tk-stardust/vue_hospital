@@ -40,7 +40,7 @@
 </template>
 
 <script setup>
-import { reactive, ref } from 'vue';
+import { reactive, ref, toRaw } from 'vue';
 import { getCode, login, menuPermissions, userAuthentication } from '../../api'
 import { useRouter } from 'vue-router';
 import { useMenuStore } from '../../stores/menu';
@@ -162,10 +162,11 @@ const submitForm = async (formEl)=>{
                         localStorage.setItem('pz_token',data.data.token)
                         localStorage.setItem('pz_userInfo',JSON.stringify(data.data.userInfo))
                         menuPermissions().then(({data})=>{
-                            console.log(data,'dada');
                             dynamicMenu(data.data)
-                            console.log(routerList,'routerList');
-                            // router.push('/')
+                            toRaw(routerList).forEach(item=>{
+                                router.addRoute('main',item)
+                            })
+                            router.push('/')
                         })
                     }
                 })

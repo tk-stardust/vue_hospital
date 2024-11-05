@@ -31,6 +31,7 @@ http.interceptors.response.use(function (response) {
     if(response.data.code === -2){
         localStorage.removeItem('pz_token')
         localStorage.removeItem('pz_userInfo')
+        localStorage.removeItem('menu')
         window.location.href = window.location.origin
     }
     return response;

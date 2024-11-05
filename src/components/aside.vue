@@ -23,10 +23,12 @@ import { reactive } from "vue";
 import { useMenuStore } from "../stores/menu";
 import { storeToRefs } from "pinia";
 const router = useRouter()
-const menuData = reactive(router.options.routes[0].children)
+// const menuData = reactive(router.options.routes[0].children)
 // menu的store
 const menuStore = useMenuStore()
-const {isCollapse} = storeToRefs(menuStore)
+const {isCollapse,routerList} = storeToRefs(menuStore)
+
+const menuData = routerList
 
 const handleOpen = (key,keyPath)=>{
     console.log(key, keyPath)
