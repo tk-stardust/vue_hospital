@@ -36,10 +36,11 @@ const router = useRouter()
 const menuIndex = computed(()=>(item)=> `${props.index}-${item.meta.id}`
 )
 const menuStore = useMenuStore()
-const {addMenu} = menuStore
+const {addMenu,updateMenuActive} = menuStore
 // 点击菜单
 const menuClick = (item,active) => {
     addMenu(item.meta)
+    updateMenuActive(active)
     router.push(item.meta.path)
 }
 </script>

@@ -27,6 +27,8 @@ import { useMenuStore } from './stores/menu'
 
 const pinia = createPinia()
 pinia.use(piniaPluginPeersistedstate)
+
+
 const app = createApp(App)
 // 注册图标
 for (const [key, component] of Object.entries(ElementPlusIconsVue)) {

@@ -7,11 +7,29 @@ import Group from '../views/auth/group/index.vue'
 import Order from '../views/vppz/order/index.vue'
 import Staff from '../views/vppz/staff/index.vue'
 import Dashboard from '../views/dashboard/index.vue'
+
+const menu = localStorage.getItem('menu')
+
 const routes = [
     {
         path: '/',
         component: Layout,
         name: 'main',
+        redirect: to => {
+            if(menu){
+                // 有子菜单
+                console.log('1');
+                const child = JSON.parse(menu).routerList[0].children
+                if(child && child.length>0){
+                    return child[0].meta.path
+                }else{
+                    return JSON.parse(menu).routerList[0].meta.path
+                }
+            }else{
+                console.log('2');
+                return '/'
+            }
+        },
         children: [
             // {
             //     path: 'dashboard',
