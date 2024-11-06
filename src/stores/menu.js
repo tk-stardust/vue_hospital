@@ -7,10 +7,10 @@ export const useMenuStore = defineStore('menu',()=>{
     const localMenu = localMenuStr ? JSON.parse(localMenuStr) : {}
     const reactiveLocalMenu = reactive(localMenu);
     const isCollapse = localMenuStr ? ref(reactiveLocalMenu.isCollapse) : ref(false)
-    const selectMenu = localMenuStr ? reactiveLocalMenu.selectMenu : reactive([])
-    const routerList = localMenuStr ? reactiveLocalMenu.routerList : reactive([])
+    const selectMenu = localMenuStr ? reactive(localMenu.selectMenu) : reactive([])
+    const routerList = localMenuStr ? reactive(localMenu.routerList) : reactive([])
     const menuActive = localMenuStr ? ref(reactiveLocalMenu.menuActive) : ref('1-1')
-
+    
     // 菜单隐藏
     function collapseMenu(){
         isCollapse.value = !isCollapse.value

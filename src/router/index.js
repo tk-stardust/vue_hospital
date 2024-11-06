@@ -18,7 +18,6 @@ const routes = [
         redirect: to => {
             if(menu){
                 // 有子菜单
-                console.log('1');
                 const child = JSON.parse(menu).routerList[0].children
                 if(child && child.length>0){
                     return child[0].meta.path
