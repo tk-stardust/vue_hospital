@@ -25,6 +25,7 @@ http.interceptors.request.use(function (config) {
 
 // 添加响应拦截器
 http.interceptors.response.use(function (response) {
+
     // 对接口异常的数据给用户提示
     if(response.data.code === -1){
         
