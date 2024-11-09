@@ -19,7 +19,6 @@ export const useMenuStore = defineStore('menu',()=>{
     function addMenu(payload){
         if(selectMenu.findIndex(item => item.path === payload.path) === -1){
             selectMenu.push(payload)
-            console.log(selectMenu,'a',routerList);
         }
     }
     function closeMenu(payload){

@@ -155,7 +155,6 @@ import { useRoute } from 'vue-router';
 import { companion, companionList, deleteCompanion, photoList } from '../../../api';
 import { ElMessage } from 'element-plus';
 import dayjs from 'dayjs';
-import { id } from 'element-plus/es/locales.mjs';
 
 onMounted(() => {
   photoList().then(({data}) => {
