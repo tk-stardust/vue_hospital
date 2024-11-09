@@ -31,7 +31,7 @@
               />
           </van-col>
       </van-row>
-      <van-row class="yy-list" v-for="item in homeData.hospitals" justify="space-around">
+      <van-row @click="goOrder(item)" class="yy-list" v-for="item in homeData.hospitals" justify="space-around">
           <van-col span="6">
               <van-image
                   width="100"
@@ -59,6 +59,7 @@
 <script setup>
 
 import { getCurrentInstance, onMounted, reactive, ref } from 'vue';
+import { useRouter } from 'vue-router';
 
 const searchValue = ref('')
 
@@ -75,9 +76,18 @@ const homeData = reactive({
 })
 
 // 快捷入口
-const getOrderTwo = () => {
+const router = useRouter()
+const goOrderTwo = (index) => {
+  router.push(`/createOrder?id=${homeData.hospitals[index].id}`)
+ 
 
 }
+
+// 点击医院列表点击
+const goOrder = (data) => {
+  router.push(`/createOrder?id=${data.id}`)
+}
+
 
 onMounted( async() => {
     const { data } = await proxy.$api.index()
